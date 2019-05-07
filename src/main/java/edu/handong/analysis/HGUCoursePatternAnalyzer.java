@@ -1,9 +1,5 @@
 package edu.handong.analysis;
 
-import java.util.StringTokenizer;
-import java.util.List;
-import java.util.ArrayList;
-
 import edu.handong.analysis.datamodel.Course;
 import edu.handong.analysis.datamodel.Student;
 
@@ -36,7 +32,7 @@ public class HGUCoursePatternAnalyzer {
 		
 		numOfStudents = Integer.parseInt(args[0]);
 		numOfCourses = Integer.parseInt(args[1]);
-	
+	    
 		students = initiateStudentArrayFromLines(lines);
 		
 		System.out.println("Number of All Students: " + numOfStudents);
@@ -60,35 +56,34 @@ public class HGUCoursePatternAnalyzer {
 	private Student[] initiateStudentArrayFromLines(String[] lines) {
 
 		// TODO: implement this method
-
-		List<Student> list = new ArrayList<Student>();
-
+		students = new Student[numOfStudents];
+		String[] name = new String[lines.length];
+		Student realName;
+		Student[] studentNameNumTwo = new Student[lines.length];
+		Student[] studentList  = new Student[numOfStudents];
 
 		for(int i = 0; i < lines.length; i++) {
 			String line = lines[i];
-			StringTokenizer st = new StringTokenizer(line, ",");
-			String hakki = st.nextToken();
-			String name = st.nextToken().trim();
-
-			boolean isExist = false;
-			for (int j=0; j<list.size(); j++) {
-				if (name.equals(list.get(j).getName())) {
-					isExist = true;
-				}
-			}
-
-			if (!isExist) {
-				list.add(new Student(name));
-			}
-			
+			String[] names = line.split(", ");
+			String studentName = names[1];
+			name[i]=studentName;
+			studentNameNumTwo[i] = new Student(studentName);
 		}
 		
+		int i = 0;
+		for(String anotherName : name) {
+			realName = new Student(anotherName);
+			while(!studentExist(studentList,realName)) {
+				studentList[i] = realName;
+				i++;
+			}
+		}
 		
-		return list.toArray(new Student[1]);
+		return studentList;
 	}
 
 	/**
-	 * This method check if there is the same name of the second arugement in the array, students
+	 * This method check if there is the same name of the second argument in the array, students
 	 * @param students
 	 * @param student
 	 * @return boolean
@@ -98,9 +93,15 @@ public class HGUCoursePatternAnalyzer {
 		// TODO: implement this method
 		boolean result = false;
 		
-		for (int i=0; i<students.length; i++) {
-			if (students[i].getName().equals(student.getName()))
+		int i=0;
+		while(students[i]!=null) {
+			if(students[i].getName().equals(student.getName())) {
 				result = true;
+				break;
+			}
+			
+			i++;
+		
 		}
 		
 		return result;
@@ -114,31 +115,32 @@ public class HGUCoursePatternAnalyzer {
 	private Course[] initiateCourseArrayFromLines(String[] lines) {
 		
 		// TODO: implement this method
-		List<Course> secondList = new ArrayList<Course>();
-
 		
+		courses = new Course[numOfCourses];
+		String[] nameCourse = new String[lines.length];
+		Course realNameCourse;
+		Course[] courseTwo = new Course[lines.length];
+		Course[] courseList  = new Course[numOfCourses];
+
 		for(int i = 0; i < lines.length; i++) {
 			String line = lines[i];
-			StringTokenizer st = new StringTokenizer(line, ",");
-			String hakki = st.nextToken();
-			String name = st.nextToken();
-			String courseName = st.nextToken().trim();
-
-			boolean isExist = false;
-			for (int j=0; j<secondList.size(); j++) {
-				if (courseName.equals(secondList.get(j).getCourseName())) {
-					isExist = true;
-				}
-			}
-
-			if (!isExist) {
-				secondList.add(new Course(courseName));
-			}
-			
+			String[] names = line.split(", ");
+			String courseName = names[2];
+			nameCourse[i]=courseName;
+			courseTwo[i] = new Course(courseName);
 		}
 		
+		int i = 0;
+		for(String anotherNameCourse : nameCourse) {
+			realNameCourse = new Course(anotherNameCourse);
+			while(!courseExist(courseList,realNameCourse)) {
+				courseList[i] = realNameCourse;
+				i++;
+			}
+		}
 		
-		return secondList.toArray(new Course[1]);
+		return courseList;
+		
 	}
 	/**
 	 * This method check if there is the same name of the second argument in the array, courses.
@@ -152,9 +154,15 @@ public class HGUCoursePatternAnalyzer {
 		
 		boolean result = false;
 		
-		for (int i=0; i<courses.length; i++) {
-			if (courses[i].getCourseName().equals(course.getCourseName()))
+		int i=0;
+		while(courses[i]!=null) {
+			if(courses[i].getCourseName().equals(course.getCourseName())) {
 				result = true;
+				break;
+			}
+			
+			i++;
+		
 		}
 		
 		return result;
